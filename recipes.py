@@ -12,7 +12,7 @@ class Ingredient:
     @quantity.setter
     def quantity (self, value):
         value = float(value)
-        if value < 0:
+        if value <= 0:
             raise ValueError("Количество должно быть положительным")
         self._quantity = value
 
@@ -26,9 +26,13 @@ class Ingredient:
         return self.name == ingredient.name and self.unit == ingredient.unit 
 
 class Recipe:
-    def __init__(self, title, ingredients):
-        self.title = title
-        self.ingredients = ingredients
+    def __init__(self, title, ingredients=None):
+    self.title = title
+
+    if ingredients is None:
+        ingredients = []
+
+    self.ingredients = ingredients.copy()
 
     def add_ingredient(self, ingredient: Ingredient):
         for current in self.ingredients:
@@ -44,14 +48,20 @@ class Recipe:
         return ratio > 0
 
     def scale(self, ratio):
+    if not Recipe.is_valid_ratio(ratio):
+        raise ValueError("Коэффициент должен быть положительным")
 
-        new_ingredients = []
-        for ingredient in self.ingredients:
-            new_ingredient = Ingredient(ingredient.name, ingredient.quantity * ratio,ingredient.unit)
+    new_ingredients = []
 
-            new_ingredients.append(new_ingredient)
+    for ingredient in self.ingredients:
+        new_ingredient = Ingredient(
+            ingredient.name,
+            ingredient.quantity * ratio,
+            ingredient.unit
+        )
+        new_ingredients.append(new_ingredient)
 
-        return Recipe(self.title, new_ingredients)
+    return Recipe(self.title, new_ingredients)
 
     def __len__(self):
         return len(self.ingredients)
