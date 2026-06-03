@@ -1,6 +1,6 @@
 import pytest
 
-from main import Ingredient, Recipe, ShoppingList
+from recipes import Ingredient, Recipe, ShoppingList
 
 
 def test_ingredient_init():
